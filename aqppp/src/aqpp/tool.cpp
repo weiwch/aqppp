@@ -10,16 +10,16 @@ namespace aqppp
 		}
 
 
-	 void Tool::MkDirRecursively(std::string dirpath)
-	 {
-		 std::vector<std::string> pathseps = Tool::split(dirpath, '/');
-		 std::string s = "";
-		 for (int i = 0;i < pathseps.size();i++)
-		 {
-			 s += pathseps[i] + '/';
-			 _mkdir(s.c_str());
-		 }
-	 }
+	//  void Tool::MkDirRecursively(std::string dirpath)
+	//  {
+	// 	 std::vector<std::string> pathseps = Tool::split(dirpath, '/');
+	// 	 std::string s = "";
+	// 	 for (int i = 0;i < pathseps.size();i++)
+	// 	 {
+	// 		 s += pathseps[i] + '/';
+	// 		 _mkdir(s.c_str());
+	// 	 }
+	//  }
 
 
 

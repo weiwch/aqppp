@@ -1,5 +1,5 @@
-#pragma once
 #include "aqpp.h"
+#include <cfloat>
 
 namespace aqppp {
 

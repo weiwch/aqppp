@@ -1,6 +1,7 @@
-#pragma once
+
 //#include"stdafx.h"
 #include "stratified_aqpp.h"
+#include <cfloat>
 
 namespace aqppp {
 

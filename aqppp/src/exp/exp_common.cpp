@@ -1,5 +1,6 @@
 //#include "stdafx.h"
 #include "exp_common.h"
+#include <sql.h>
 
 namespace expDemo {
 
@@ -68,13 +69,13 @@ namespace expDemo {
 			double ub_data = cur_q[ci].ub;
 			if (id >= 0)
 			{
-				lb_str = distinct_itos[id].at(long int(round(lb_data)));
-				ub_str = distinct_itos[id].at(long int(round(ub_data)));
+				lb_str = distinct_itos[id].at(int(round(lb_data)));
+				ub_str = distinct_itos[id].at(int(round(ub_data)));
 			}
 			else
 			{
-				lb_str = aqppp::DoubleEqual(round(lb_data),lb_data)? std::to_string(long long int(round(lb_data))): std::to_string(lb_data);
-				ub_str = aqppp::DoubleEqual(round(ub_data), ub_data) ? std::to_string(long long int(round(ub_data))) : std::to_string(ub_data);
+				lb_str = aqppp::DoubleEqual(round(lb_data),lb_data)? std::to_string((long long)(round(lb_data))): std::to_string(lb_data);
+				ub_str = aqppp::DoubleEqual(round(ub_data), ub_data) ? std::to_string((long long)(round(ub_data))) : std::to_string(ub_data);
 				if (PAR.CONDITION_NAMES[ci] == "pickup_time" || PAR.CONDITION_NAMES[ci] == "dropoff_time")
 				{
 					while (lb_str.size() < 6) lb_str = "0" + lb_str;
@@ -167,16 +168,16 @@ namespace expDemo {
 
 	static void fprintSample(FILE* out_file, std::vector<std::vector<double>> sample, std::string start_inf, std::string end_inf, int row_limit)
 	{
-		fprintf(out_file, "\n-----------%s--------------\n", start_inf);
+		fprintf(out_file, "\n-----------%s--------------\n", start_inf.c_str());
 		const int ROW_NUM = sample[0].size();
 		const int COL_NUM = sample.size();
-		for (int ri = 0; ri < min(row_limit, ROW_NUM); ri++)
+		for (int ri = 0; ri < std::min(row_limit, ROW_NUM); ri++)
 		{
 			for (int ci = 0; ci < COL_NUM; ci++)
 				fprintf(out_file, "%f\t", sample[ci][ri]);
 			fprintf(out_file, "\n");
 		}
-		fprintf(out_file, "-----------%s--------------\n\n", end_inf);
+		fprintf(out_file, "-----------%s--------------\n\n", end_inf.c_str());
 	}
 
 }

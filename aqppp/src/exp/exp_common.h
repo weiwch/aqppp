@@ -5,6 +5,8 @@
 #include"../aqpp/tool.h"
 #include<vector>
 #include"../aqpp/sql_interface.h"
+#include <climits>
+#include <sql.h>
 namespace expDemo {
 	void WritePar(FILE *par_file, aqppp::Settings par);
 
@@ -12,7 +14,7 @@ namespace expDemo {
 
 	//pair<double, double> query_real_value4sum(vector<Condition>& cur_q, string table_name, MYSQL* conn, const Settings PAR);
 
-	double QueryRealValue(const std::vector<aqppp::Condition>& cur_q, std::string table_name, SQLHANDLE &sqlconnectionhandle, const aqppp::Settings PAR, std::string agg_action, std::vector<std::unordered_map<int, std::string>> &distinct_itos= std::vector<std::unordered_map<int, std::string>>(),bool CLEANCACHE=false);
+	double QueryRealValue(const std::vector<aqppp::Condition>& cur_q, std::string table_name, SQLHANDLE &sqlconnectionhandle, const aqppp::Settings PAR, std::string agg_action, std::vector<std::unordered_map<int, std::string>> &distinct_itos, bool CLEANCACHE=false);
 
 	//double count_db(string table_name, SQLHANDLE &sqlstatementhandle, string db_name);
 

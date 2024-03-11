@@ -10,11 +10,11 @@ namespace expDemo {
 	 const aqppp::Settings ComprehensiveExp::InitPar4DefaultSample()
 	 {
 		 aqppp::Settings PAR;
-		 PAR.DB_NAME = "skew_s10_z2.dbo";
+		 PAR.DB_NAME = "TPCH.dbo";
 		 PAR.SAMPLE_NAME = "cpp_sample";
 		 PAR.SAMPLE_RATE = 0.003;
 		 PAR.ALL_MTL_POINTS = 20000;
-		 PAR.CREATE_DB_SAMPLES = false;
+		 PAR.CREATE_DB_SAMPLES = true;
 		 return PAR;
 	 }
 
@@ -73,7 +73,7 @@ namespace expDemo {
 			double s_exp = clock();
 			ExpPar exp_par = GetExpPar();
 			FILE *info_file, *form_file, *par_file, *query_file, *direct_query_file;
-			aqppp::Tool::MkDirRecursively(root_path);
+			// aqppp::Tool::MkDirRecursively(root_path);
 			fopen_s(&info_file, (root_path+"/info.txt").data(), "w");
 			fopen_s(&form_file, (root_path+"/form_res.txt").data(), "w");
 			fopen_s(&par_file, (root_path+"/par.txt").data(), "w");
@@ -118,7 +118,8 @@ namespace expDemo {
 				std::vector <std::vector<double>> tpsample;
 				std::vector<std::vector<aqppp::CA>> tpcasample = std::vector<std::vector<aqppp::CA>>();
 				aqppp::Tool::TransSample(sample, tpcasample);
-				std::pair<double, double> read_sample_times = ReadSamples(sqlconnectionhandle, tppar, 1, tpsample, std::vector <std::vector<double>>());
+				auto tmp = std::vector<std::vector<double>>();
+				std::pair<double, double> read_sample_times = ReadSamples(sqlconnectionhandle, tppar, 1, tpsample, tmp);
 				aqppp::Tool::GenUserQuires(tpsample, tpcasample, tppar.RAND_SEED, exp_par.QUERY_NUM, { exp_par.MIN_QUERY_SELECTIVELY,exp_par.MAX_QUERY_SELECTIVELY }, user_queries);
 			}
 			else
@@ -203,7 +204,8 @@ namespace expDemo {
 
 
 				double t5 = clock();
-				double real_value = QueryRealValue(cur_q, PAR.TABLE_NAME, sqlconnectionhandle, PAR,"sum");
+				auto tmp = std::vector<std::unordered_map<int, std::string>>();
+				double real_value = QueryRealValue(cur_q, PAR.TABLE_NAME, sqlconnectionhandle, PAR,"sum", tmp);
 				double time_direct = (clock() - t5) / CLOCKS_PER_SEC;
 
 				double selectively = aqppp::Tool::EstimateSelectively(sample, cur_q).second;

@@ -21,7 +21,8 @@ bascially MTL_POINT_NUM in this file is equal to MTL_POINT_NUM-1 in New_climb fi
 #include<vector>
 #include <algorithm>
 #include"sql_interface.h"
-#include"Tool.h"
+#include"tool.h"
+#include<cfloat>
 #include<cassert>
 
 namespace aqppp {
@@ -81,10 +82,6 @@ namespace aqppp {
 		void InitPointsRandom(const std::vector<CA>&CAsample, int MTL_POINT_NUM, std::vector<CA>& o_mtl_points);
 		void InitPointsMaxVariance(const std::vector<CA>&CAsample, int MTL_POINT_NUM, std::vector<CA>& o_mtl_points);
 
-		typedef std::unordered_map<std::pair<int, int>, std::vector<std::pair<int, double>>, PairHash> Piece_type;
-		typedef std::unordered_map<int, std::vector<std::pair<int, double>>> Remove_type;
-		typedef std::unordered_map<int, std::pair<int, int>> Pre_next_type;
-
 		static void CoutMaxError(std::vector<double> &rlv_var, std::vector<double> &choice, std::vector<int> &maxids, std::string s = "");
 
 
@@ -128,7 +125,7 @@ namespace aqppp {
 		static void FindTwoMaxPieces(const Piece_type &pieces, std::vector<std::pair<int, int>> &o_max_pieces, std::vector<std::pair<int, double>> &o_max_vars_info);
 
 
-		double ComputeMaxError(const Piece_type &pieces, std::vector<std::pair<int, double>> &o_max_vars = std::vector<std::pair<int, double>>());
+		double ComputeMaxError(const Piece_type &pieces, std::vector<std::pair<int, double>> &o_max_vars);
 
 
 		//find remove_pid with min var, but except ids in except_id

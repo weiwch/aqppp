@@ -6,8 +6,8 @@ namespace aqppp {
 
 	void SqlInterface::ShowError(unsigned int handletype, const SQLHANDLE& handle)
 	{
-		SQLWCHAR sqlstate[1024];
-		SQLWCHAR message[1024];
+		SQLCHAR sqlstate[1024];
+		SQLCHAR message[1024];
 		SQLGetDiagRec(handletype, handle, 1, sqlstate, NULL, message, 1024, NULL);
 		std::wcout << "Message: " << message << "\nSQLSTATE: " << sqlstate << std::endl;
 	}
@@ -20,7 +20,7 @@ namespace aqppp {
 		if (SQL_SUCCESS != SQLSetEnvAttr(sqlenvhandle, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0)) return;
 		if (SQL_SUCCESS != SQLAllocHandle(SQL_HANDLE_DBC, sqlenvhandle, &sqlconnectionhandle)) return;
 
-		switch (SQLConnect(sqlconnectionhandle, (SQLWCHAR*)odbc_name.c_str(), SQL_NTS, (SQLWCHAR*)user_name.c_str(), SQL_NTS, (SQLWCHAR*)pwd.c_str(), SQL_NTS))
+		switch (SQLConnect(sqlconnectionhandle, (SQLCHAR*)odbc_name.c_str(), SQL_NTS, (SQLCHAR*)user_name.c_str(), SQL_NTS, (SQLCHAR*)pwd.c_str(), SQL_NTS))
 		{
 		case SQL_SUCCESS_WITH_INFO:
 			std::cout << "success" << std::endl;
@@ -37,7 +37,7 @@ namespace aqppp {
 	int SqlInterface::ConnectDb(SQLHANDLE &sqlconnectionhandle, std::string dsn, std::string user, std::string pwd)
 	{
 		int retcode = 0;
-		switch (SQLConnect(sqlconnectionhandle, (SQLWCHAR*)dsn.c_str(), SQL_NTS, (SQLWCHAR*)user.c_str(), SQL_NTS, (SQLWCHAR*)pwd.c_str(), SQL_NTS))
+		switch (SQLConnect(sqlconnectionhandle, (SQLCHAR*)dsn.c_str(), SQL_NTS, (SQLCHAR*)user.c_str(), SQL_NTS, (SQLCHAR*)pwd.c_str(), SQL_NTS))
 		{
 		case SQL_SUCCESS_WITH_INFO:
 			std::cout << "success" << std::endl;
@@ -60,11 +60,12 @@ namespace aqppp {
 	*/
 	void SqlInterface::SqlQuery(std::string query, SQLHANDLE &sqlstatementhandle)
 	{
-		std::wstring wquery = std::wstring(query.begin(), query.end());
-		//SQLWCHAR wq[10000] = {};
-		WCHAR* wq = const_cast<WCHAR*>(wquery.c_str());
-		std::wcout << "sql_query:" << wquery << std::endl;
-		if (SQL_SUCCESS != SQLExecDirect(sqlstatementhandle,wq, SQL_NTS))
+		//std::wstring wquery = std::wstring(query.begin(), query.end());
+		//SQLCHAR wq[10000] = {};
+		//SQLCHAR* wq = reinterpret_cast<SQLCHAR*>(wquery.c_str());
+		//std::wcout << "sql_query:" << wquery << std::endl;
+		std::cout<< "sql_query:" << query << std::endl;
+		if (SQL_SUCCESS != SQLExecDirect(sqlstatementhandle, (SQLCHAR*)query.c_str(), SQL_NTS))
 		{
 			ShowError(SQL_HANDLE_STMT, sqlstatementhandle);
 		}

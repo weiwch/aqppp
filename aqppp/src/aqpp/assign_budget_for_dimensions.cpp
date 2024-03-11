@@ -1,8 +1,9 @@
 /* distribute MTL_POINTS into different dimension.
 */
-#pragma once
+
 //#include"stdafx.h"
 #include "assign_budget_for_dimensions.h"
+#include <climits>
 
 namespace aqppp
 {
@@ -74,7 +75,7 @@ namespace aqppp
 			if (act_product % cur_min_mtl != 0) std::cout << "not div integer wrong" << std::endl;
 
 			int LB_other = act_product / cur_min_mtl; //product of mtl in other dims. 
-			o_MTL_dist_result[dim_id] = min((int)casample[dim_id].size(), this->PAR.ALL_MTL_POINTS / LB_other);   //cur allowed max mtl.
+			o_MTL_dist_result[dim_id] = std::min((int)casample[dim_id].size(), this->PAR.ALL_MTL_POINTS / LB_other);   //cur allowed max mtl.
 			act_product = act_product / cur_min_mtl*o_MTL_dist_result[dim_id];
 
 			//cout << "dim: " << dim_id << " " << o_MTL_dist_result[dim_id] << " " << mtl_res[ci].mtl_num << " " << mtl_res[ci].err << endl;
@@ -118,7 +119,8 @@ namespace aqppp
 		//cout << "sample rate" <<this->PAR.SAMPLE_RATE << endl;
 		HillClimbing climb_method = HillClimbing(this->PAR.SAMPLE_ROW_NUM, this->PAR.SAMPLE_RATE, this->PAR.CI_INDEX, this->PAR.CLIMB_MAX_ITER, this->PAR.CLIMB_INIT_DISTINCT_EVEN);
 
-		double err_max = climb_method.ChoosePoints1Dim(cur_col, k_min, std::vector<CA>(), 0, 0, CLB_EVEN_INIT, ADJUST_WAY);
+		auto tmp = std::vector<CA>();
+		double err_max = climb_method.ChoosePoints1Dim(cur_col, k_min, tmp, 0, 0, CLB_EVEN_INIT, ADJUST_WAY);
 
 		int k_max = cur_col.size();
 		double y_gap = (1.0 - 1.0 / sqrt((double)k_max)) / (double)this->PAR.PIECE_NUM;
@@ -130,7 +132,8 @@ namespace aqppp
 			double cur_y = 1.0 - pi*y_gap;
 			int cur_k = (1.0 / cur_y)*(1.0 / cur_y);
 			while (cur_k <= o_err_profile[pi - 1].mtl_num && cur_k < k_max) cur_k++;
-			double cur_err = climb_method.ChoosePoints1Dim(cur_col, cur_k, std::vector<CA>());
+			auto tmp = std::vector<CA>();
+			double cur_err = climb_method.ChoosePoints1Dim(cur_col, cur_k, tmp);
 			if (cur_err > o_err_profile[pi - 1].err)
 			{
 				//cout << "err profile not decrease in point" << pi << " " << o_err_profile[pi - 1].err << " " << cur_err << endl;

@@ -1,6 +1,10 @@
-#pragma once
+
 //#include"stdafx.h"
 #include "query_template.h"
+#include <cfloat>
+
+#include <sql.h>
+
 namespace aqppp
 {
 	double QueryTemplate::ComputeDifferenceForAvg(const std::vector<std::vector<double>>&sample, const std::vector<Condition>& user_demands, const std::vector<Condition>& mtl_choices, double CI_INDEX, double ufactor)
@@ -13,7 +17,7 @@ namespace aqppp
 		double mpred = 0.0;
 		for (int ri = 0;ri < ROW_NUM;ri++)
 		{
-			boolean mmeet = true;
+			bool mmeet = true;
 			for (int ci = 1; ci < USER_CONDITION_DIM + 1; ci++)
 			{
 				double con_data = sample[ci][ri];
@@ -63,7 +67,7 @@ namespace aqppp
 		double upred = 0.0;
 		for (int ri = 0;ri < ROW_NUM;ri++)
 		{
-			boolean umeet = true;
+			bool umeet = true;
 			for (int ci = 1; ci < USER_CONDITION_DIM + 1; ci++)
 			{
 				double con_data = sample[ci][ri];
@@ -90,7 +94,7 @@ namespace aqppp
 		double mpred = 0.0;
 		for (int ri = 0;ri < ROW_NUM;ri++)
 		{
-			boolean mmeet = true;
+			bool mmeet = true;
 			for (int ci = 1; ci < USER_CONDITION_DIM + 1; ci++)
 			{
 				double con_data = sample[ci][ri];

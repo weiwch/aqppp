@@ -1,7 +1,6 @@
 //comprehensive experiment.
 #pragma once
 #include<vector>
-#include <windows.h>
 #include<time.h>
 #include"../aqpp/sql_interface.h"
 #include"../aqpp/common_content.h"
@@ -43,6 +42,6 @@ namespace expDemo {
 	public:
 
 		static int Exp(SQLHANDLE& sqlconnectionhandle);
-		static int ComprehensiveExp::RunOnce(SQLHANDLE& sqlconnectionhandle, aqppp::Settings PAR);
+		static int RunOnce(SQLHANDLE& sqlconnectionhandle, aqppp::Settings PAR);
 	};
 }

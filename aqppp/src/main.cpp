@@ -11,23 +11,33 @@
 #include<random>
 #include<map>
 #include<unordered_map>
-#include<Windows.h>
 #include<sqlext.h>
 #include <exception>
-#include"aqpp\configuration.h"
-#include"aqpp\sql_interface.h"
-#include "exp\comprehensive_exp.h"
+#include"aqpp/configuration.h"
+#include"aqpp/sql_interface.h"
+#include"exp/comprehensive_exp.h"
 #include<any>
 
-
+/*
 void ShowError(unsigned int handletype, const SQLHANDLE& handle)
 {
 	//	char* sqlstate;
-	SQLWCHAR sqlstate[1024] = {};
-	SQLWCHAR message[1024] = {};
+	SQLCHAR sqlstate[1024] = {};
+	SQLCHAR message[1024] = {};
 	if (SQL_SUCCESS == SQLGetDiagRec(handletype, handle, 1, sqlstate, NULL, message, 1024, NULL))
 		std::wcout << "Message: " << message << "\nSQLSTATE: " << sqlstate << std::endl;
+}*/
+void ShowError(SQLSMALLINT handleType, SQLHANDLE handle)
+{
+	SQLCHAR SqlState[6] = {};
+	SQLINTEGER    NativeError;
+	SQLCHAR       Msg[SQL_MAX_MESSAGE_LENGTH];
+	SQLSMALLINT   MsgLen;
+	SQLGetDiagRec(handleType, handle, 1, SqlState, &NativeError, Msg, sizeof(Msg), &MsgLen);
+	//std::wcout.imbue(std::locale("chs"));
+	std::cout << "\nSQLSTATE: " << SqlState << "\nSQL Error: " << Msg  << std::endl;
 }
+
 
 
 int GenQuery( SQLHANDLE &sqlconnectionhandle)
@@ -39,7 +49,8 @@ int GenQuery( SQLHANDLE &sqlconnectionhandle)
 	aqppp::Settings PAR = aqppp::Settings();
 	PAR.CONDITION_NAMES = { "L_ORDERKEY","L_PARTKEY" };
 	aqppp::SqlInterface::CreateDbSamples(sqlconnectionhandle, PAR.RAND_SEED, PAR.DB_NAME, PAR.TABLE_NAME, { PAR.SAMPLE_RATE,PAR.SUB_SAMPLE_RATE }, { PAR.SAMPLE_NAME,PAR.SUB_SAMPLE_NAME });
-	expDemo::ReadSamples(sqlconnectionhandle, PAR, 1, sample, std::vector<std::vector<double>>());
+	auto tmp = std::vector<std::vector<double>>();
+	expDemo::ReadSamples(sqlconnectionhandle, PAR, 1, sample, tmp);
 	std::vector<std::vector<aqppp::CA>> CAsample = std::vector<std::vector<aqppp::CA>>();
 	aqppp::Tool::TransSample(sample, CAsample);
 	std::vector<std::vector<aqppp::Condition>> user_queries = std::vector<std::vector<aqppp::Condition>>();
@@ -78,15 +89,17 @@ int main()
 	if (SQL_SUCCESS != SQLSetEnvAttr(sqlenvhandle, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0)) return -1;
 	if (SQL_SUCCESS != SQLAllocHandle(SQL_HANDLE_DBC, sqlenvhandle, &sqlconnectionhandle)) return -1;
 	
-	switch (SQLConnect(sqlconnectionhandle, L"SQLServer64", SQL_NTS, L"aqpplus", SQL_NTS, L"aqpplus", SQL_NTS))    //this is the connection string to connect SQLServer.
+	switch (SQLConnect(sqlconnectionhandle, (SQLCHAR*)"mssql", SQL_NTS, (SQLCHAR*)"aqpplus", SQL_NTS, (SQLCHAR*)"aqpplus", SQL_NTS))    //this is the connection string to connect SQLServer.
 	{
 	case SQL_SUCCESS_WITH_INFO:
 		std::cout << "success" << std::endl;
 		ShowError(SQL_HANDLE_DBC, sqlconnectionhandle);
+		getchar();
 		break;
 	default:
 		std::cout << "error" << std::endl;
 		ShowError(SQL_HANDLE_DBC, sqlconnectionhandle);
+		std::cout << std::endl;
 		getchar();
 		return -1;
 	}
@@ -97,6 +110,7 @@ int main()
 	for (std::string st : exp_ids)
 	{
 		try {
+			std::cout << "runing" << std::endl;
 			if (st == "1" || st == "all") expDemo::ComprehensiveExp::Exp(sqlconnectionhandle);
 			//if (st == "2" || st == "all") GenQuery(sqlconnectionhandle);
 		}

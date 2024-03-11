@@ -1,6 +1,5 @@
 #pragma once
 #include<vector>
-#include <windows.h>
 #include<time.h>
 #include"../aqpp/sql_interface.h"
 #include"../aqpp/common_content.h"

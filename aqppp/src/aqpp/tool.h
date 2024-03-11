@@ -1,5 +1,5 @@
 #pragma once
-#include<direct.h>
+
 #include<assert.h>
 #include <iostream>
 #include<fstream>
@@ -11,6 +11,11 @@
 #include<random>
 #include"common_content.h"
 #include<unordered_set>
+
+#ifdef __unix
+#define fopen_s(pFile,filename,mode) ((*(pFile))=fopen((filename),(mode)))==NULL
+#endif
+
 namespace aqppp
 {
 	class Tool {
@@ -39,7 +44,7 @@ namespace aqppp
 		static double ComputeCovariance(const std::vector<double>& A, const std::vector<double>& Y);
 		static double ComputeCorrelation(std::vector<double>& X, std::vector<double>& Y);
 
-		static void MkDirRecursively(std::string dirpath);
+		//static void MkDirRecursively(std::string dirpath);
 
 		static std::vector<std::string> split(const std::string &s, char delim);
 		static void SaveQueryFile(std::string query_file_full_name, std::vector<std::vector<Condition>> &o_user_queries);

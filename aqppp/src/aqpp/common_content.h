@@ -6,18 +6,19 @@
 #include<vector>
 #include<map>
 #include<unordered_map>
+#include <sql.h>
 
 namespace aqppp {
 	typedef std::vector<std::unordered_map<std::string, int>> DistId;
 	struct Settings {
-		std::string DB_NAME = "skew_s100_z2.dbo";
+		std::string DB_NAME = "TPCH.dbo";
 		std::string TABLE_NAME = "lineitem";
 		std::string SAMPLE_NAME = "sample";
 		std::string SUB_SAMPLE_NAME = "sub_sample";
 		bool CREATE_DB_SAMPLES = true;
 		double SAMPLE_RATE =0.0005;
 		double SUB_SAMPLE_RATE = 0.1;
-		std::string AGGREGATE_NAME = "L_EXTENDEDPRICE";
+		std::string AGGREGATE_NAME = "L_TAX";
 		std::vector<std::string> CONDITION_NAMES = { "L_ORDERKEY","L_SUPPKEY" };
 		int GROUPBY_LEN = 0;//# attributes in CONDITION_NAMES are group by attributes. the last GROUPBY_LEN cols in CONDITION_NAMES should be group by attributes.
 		double CI_INDEX =1.96;

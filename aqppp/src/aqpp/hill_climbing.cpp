@@ -27,7 +27,7 @@ namespace aqppp {
 		o_iter_nums = std::vector<int>(DIM);
 		for (int di = 0; di < CAsample.size(); di++)
 		{
-			int cur_mtl_num = min((int)CAsample[di].size(), mtl_nums[di]);
+			int cur_mtl_num = std::min((int)CAsample[di].size(), mtl_nums[di]);
 			o_max_errs[di] = ChoosePoints1Dim(CAsample[di], cur_mtl_num, o_mtl_points[di], &o_iter_nums[di], 0,INIT_WAY, ADJUST_WAY);
 		}
 		return;
@@ -71,7 +71,7 @@ namespace aqppp {
 		if (mtl_num > CAsample.size()) mtl_num = CAsample.size();
 		o_mtl_points = std::vector<CA>();
 		const int casample_size = CAsample.size();
-		double GAP = max(1.0, (double)this->PAR.SAMPLE_ROW_NUM / (double)mtl_num);
+		double GAP = std::max(1.0, (double)this->PAR.SAMPLE_ROW_NUM / (double)mtl_num);
 		double real_count = 0;
 		double ideal_count = GAP;
 		for (int ri = 0;ri < casample_size;ri++)
@@ -93,7 +93,7 @@ namespace aqppp {
 	{
 		std::mt19937 rand_gen(rand());
 		int ROW_NUM = cur_col.size();
-		int MTL_NUM = min(MTL_POINT_NUM, ROW_NUM);
+		int MTL_NUM = std::min(MTL_POINT_NUM, ROW_NUM);
 		o_mtl_points = std::vector<CA>();
 		std::vector<int> ids = std::vector<int>();
 		for (int id = 0; id < ROW_NUM - 1; id++) ids.push_back(id);
@@ -111,7 +111,7 @@ namespace aqppp {
 	void HillClimbing::InitPointsMaxVariance(const std::vector<CA>&cur_col, int MTL_POINT_NUM, std::vector<CA>& o_mtl_points)
 	{
 		int ROW_NUM = cur_col.size();
-		int MTL_NUM = min(MTL_POINT_NUM, ROW_NUM);
+		int MTL_NUM = std::min(MTL_POINT_NUM, ROW_NUM);
 		o_mtl_points = std::vector<CA>();
 		std::vector<double> sum_acc;
 		std::vector<double> sum2_acc;
@@ -228,7 +228,7 @@ namespace aqppp {
 		std::pair<int, int> rg2 = std::pair<int, int>(pid, down_id - 1);
 		double var1 = ComputeRangeVariance(rg1, sum_acc, sqrsum_acc);
 		double var2 = ComputeRangeVariance(rg2, sum_acc, sqrsum_acc);
-		return min(var1, var2);
+		return std::min(var1, var2);
 
 	}
 
@@ -452,7 +452,8 @@ namespace aqppp {
 		std::pair<int, int> id_pie = { -1,-1 };
 		double min_err = DBL_MAX;
 		std::vector<std::pair<int, int>> max_pieces;
-		FindTwoMaxPieces(pieces, max_pieces, std::vector<std::pair<int, double>>());
+		auto tmp = std::vector<std::pair<int, double>>();
+		FindTwoMaxPieces(pieces, max_pieces, tmp);
 		if ((max_pieces.size() == 1))
 		{
 			std::pair<int, int> maxp = max_pieces[0];
@@ -461,7 +462,8 @@ namespace aqppp {
 			{
 				int t_add_id = maxp_info[i].first;
 				AddPoint(t_add_id, maxp, pieces, mtl_pre_next_id, remove_max_var, sum_acc, sqrsum_acc);
-				double t_max_err = ComputeMaxError(pieces);
+				auto tmp = std::vector<std::pair<int, double>>();
+				double t_max_err = ComputeMaxError(pieces, tmp);
 				RemovePoint(t_add_id, pieces, mtl_pre_next_id, remove_max_var, sum_acc, sqrsum_acc);
 				if (t_max_err < min_err)
 				{
@@ -477,7 +479,8 @@ namespace aqppp {
 			{
 				int t_add_id = (pieces.at(maxp))[0].first;
 				AddPoint(t_add_id, maxp, pieces, mtl_pre_next_id, remove_max_var, sum_acc, sqrsum_acc);
-				double t_max_err = ComputeMaxError(pieces);
+				auto tmp = std::vector<std::pair<int, double>>();
+				double t_max_err = ComputeMaxError(pieces, tmp);
 				if (t_max_err < min_err)
 				{
 					add_id = t_add_id;
@@ -608,7 +611,8 @@ namespace aqppp {
 		{
 
 			std::vector<std::pair<int, int>> max_pieces = std::vector<std::pair<int, int>>();
-			FindTwoMaxPieces(pieces, max_pieces, std::vector<std::pair<int, double>>());
+			auto tmp = std::vector<std::pair<int, double>>();
+			FindTwoMaxPieces(pieces, max_pieces, tmp);
 
 			std::set<int> move_candicate = std::set<int>();
 			for (int i = 0;i < max_pieces.size();i++)
