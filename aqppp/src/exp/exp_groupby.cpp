@@ -342,11 +342,11 @@ namespace Exp {
 		Settings PAR = init_par();
 		FILE *info_file, *form_file, *par_file, *query_file,*group_form_file;
 		Tool::mkdirRecursively(dirpath());
-		fopen_s(&info_file, dirpath().append(string("/info.txt")).data(), "w");
-		fopen_s(&form_file, dirpath().append(string("/form_res.txt")).data(), "w");
-		fopen_s(&par_file, dirpath().append(string("/par.txt")).data(), "w");
-		fopen_s(&query_file, dirpath().append(string("/queries.txt")).data(), "w");
-		fopen_s(&group_form_file, dirpath().append(string("/group_form.txt")).data(), "w");
+		info_file = fopen(dirpath().append(string("/info.txt")).data(), "w");
+		form_file = fopen(dirpath().append(string("/form_res.txt")).data(), "w");
+		par_file = fopen(dirpath().append(string("/par.txt")).data(), "w");
+		query_file = fopen(dirpath().append(string("/queries.txt")).data(), "w");
+		group_form_file = fopen(dirpath().append(string("/group_form.txt")).data(), "w");
 
 		
 
@@ -603,8 +603,7 @@ namespace Exp {
 		fclose(group_form_file);
 
 
-		FILE* final_gp_file;
-		fopen_s(&final_gp_file, (dirpath() + "/final_gp_file.txt").c_str(),"w");
+		FILE* final_gp_file = fopen((dirpath() + "/final_gp_file.txt").c_str(),"w");
 		fprintf(final_gp_file, "group_name\t median_spl_err\t median_aqpp_err\t avg_spl_err\t avg_aqpp_err\t spl_95err\t aqpp_95err\n");
 		for (auto gpit : groups)
 		{

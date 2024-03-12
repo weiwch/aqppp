@@ -102,7 +102,7 @@ namespace aqppp {
 	{
 		//lbid<0 is valid, but ubid<0 is invalid. but when ubid<0 isn't a valid RG, and shouldn't GenCondition. 
 		assert(ubid >= 0 && ubid<mtl_points.size());
-		assert(lbid < mtl_points.size());
+		assert((int)lbid < (int)mtl_points.size());
 		Condition d = Condition();
 		d.lb_id = lbid;
 		d.ub_id = ubid;

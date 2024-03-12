@@ -89,12 +89,11 @@ int main()
 	if (SQL_SUCCESS != SQLSetEnvAttr(sqlenvhandle, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0)) return -1;
 	if (SQL_SUCCESS != SQLAllocHandle(SQL_HANDLE_DBC, sqlenvhandle, &sqlconnectionhandle)) return -1;
 	
-	switch (SQLConnect(sqlconnectionhandle, (SQLCHAR*)"mssql", SQL_NTS, (SQLCHAR*)"aqpplus", SQL_NTS, (SQLCHAR*)"aqpplus", SQL_NTS))    //this is the connection string to connect SQLServer.
+	switch (SQLConnect(sqlconnectionhandle, (SQLCHAR*)"mssql", SQL_NTS, (SQLCHAR*)"sa", SQL_NTS, (SQLCHAR*)"MSsqlMSsql1", SQL_NTS))    //this is the connection string to connect SQLServer.
 	{
 	case SQL_SUCCESS_WITH_INFO:
 		std::cout << "success" << std::endl;
 		ShowError(SQL_HANDLE_DBC, sqlconnectionhandle);
-		getchar();
 		break;
 	default:
 		std::cout << "error" << std::endl;
@@ -104,8 +103,8 @@ int main()
 		return -1;
 	}
 
-	std::string user_choices;
-	std::cin >> user_choices;
+	std::string user_choices("1");
+	//std::cin >> user_choices;
 	std::vector<std::string> exp_ids = aqppp::Tool::split(user_choices, ',');
 	for (std::string st : exp_ids)
 	{

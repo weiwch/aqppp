@@ -4,7 +4,7 @@
 namespace expDemo {
 	std::string ComprehensiveExp::GetExpRootPath(void)
 		{
-			return "exp_result/exp_cph";
+			return "../aqppp/exp_result/exp_cph";
 		}
 
 	 const aqppp::Settings ComprehensiveExp::InitPar4DefaultSample()
@@ -72,12 +72,13 @@ namespace expDemo {
 		 std::string root_path = GetExpRootPath() + "/samplerate" + std::to_string(PAR.SAMPLE_RATE);
 			double s_exp = clock();
 			ExpPar exp_par = GetExpPar();
-			FILE *info_file, *form_file, *par_file, *query_file, *direct_query_file;
+			FILE *info_file, *form_file, *par_file, *query_file;
 			// aqppp::Tool::MkDirRecursively(root_path);
-			fopen_s(&info_file, (root_path+"/info.txt").data(), "w");
-			fopen_s(&form_file, (root_path+"/form_res.txt").data(), "w");
-			fopen_s(&par_file, (root_path+"/par.txt").data(), "w");
-			fopen_s(&query_file, (root_path+"/queries.txt").data(), "w");
+			std::cout<<(root_path+"/info.txt").data()<<std::endl;
+			info_file = fopen((root_path+"/info.txt").data(), "w");
+			form_file = fopen((root_path+"/form_res.txt").data(), "w");
+			par_file = fopen((root_path+"/par.txt").data(), "w");
+			query_file = fopen((root_path+"/queries.txt").data(), "w");
 			
 			
 

@@ -12,10 +12,6 @@
 #include"common_content.h"
 #include<unordered_set>
 
-#ifdef __unix
-#define fopen_s(pFile,filename,mode) ((*(pFile))=fopen((filename),(mode)))==NULL
-#endif
-
 namespace aqppp
 {
 	class Tool {

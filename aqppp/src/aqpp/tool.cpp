@@ -233,8 +233,7 @@ namespace aqppp
 
 	 void Tool::SaveQueryFile(std::string query_file_full_name, std::vector<std::vector<Condition>> &user_queries)
 	 {
-		 FILE *query_file = new FILE();
-		 fopen_s(&query_file, query_file_full_name.c_str(), "w");
+		 FILE *query_file = fopen(query_file_full_name.c_str(), "w");
 		 for (auto v : user_queries)
 		 {
 			 for (Condition cond:v)
